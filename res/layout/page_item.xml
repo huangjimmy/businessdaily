@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/page_name"
+  android:background="@drawable/page_title_back"
+  android:textColor="#FFFFFF"
+  android:paddingTop="5dp"
+  android:paddingBottom="5dp"
+  android:paddingLeft="36dp"
+  android:text="头版 "
+  android:textSize="18sp"
+  android:textStyle="bold"
+  android:shadowColor="#000000"
+  android:shadowRadius="1"
+  android:shadowDx="1"
+  android:shadowDy="1"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+</TextView>

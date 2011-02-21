@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  <ExpandableListView android:id="@+id/page_list"
+	android:divider="#535353" 
+	android:childDivider="@drawable/child_divider"
+	android:dividerHeight="1dp"
+	android:headerDividersEnabled="true"
+    android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+
+  </ExpandableListView>
+</RelativeLayout>
