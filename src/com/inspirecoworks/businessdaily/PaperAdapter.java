@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
@@ -48,8 +49,16 @@ public class PaperAdapter extends BaseAdapter {
 			inprogress[i] = home.getLayoutInflater().inflate(R.layout.progress, null);
 			papers[i].setContext(home);
 		}
-		Cnstock.setPassword("123456");
-		Cnstock.setUsername("jasonreed");
+		
+		SharedPreferences sp = home.getSharedPreferences("BusinessDaily", 0);
+		if(sp.getString("cnstock_username", "").length() == 0)
+		{
+			Intent intent = new Intent(home, SettingAct.class);
+			home.startActivity(intent);
+		}
+        Cnstock.setUsername(sp.getString("cnstock_username", ""));
+        Cnstock.setPassword(sp.getString("cnstock_password", ""));
+
 		
 		for(int i=0;i<3;i++)
 		if(paper_dates[i].get(Calendar.HOUR_OF_DAY)<7)

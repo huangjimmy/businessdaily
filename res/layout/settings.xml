@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent" android:orientation="vertical">
+<TextView android:text="上海证券报用户绑定  " android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
+<TextView android:text="用户名:" android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+<EditText android:layout_height="wrap_content"  android:minEms="10" android:id="@+id/username" android:layout_width="wrap_content" android:text="@+id/EditText01"></EditText>
+
+<TextView android:text="密码:"  android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+<EditText android:inputType="textPassword" android:minEms="10"  android:text="@+id/EditText02" android:id="@+id/password" android:layout_width="wrap_content" android:layout_height="wrap_content"></EditText>
+<TextView android:text="2011年1月1日起，上海证券报注册用户方能阅读上证报，请输入用户名和密码，随后返回主界面，选择“刷新”菜单即可阅读上海证券报。  "  android:layout_width="fill_parent" android:layout_height="wrap_content"></TextView>
+</LinearLayout>
