@@ -24,25 +24,24 @@ public class SettingAct extends Activity {
 		username.addTextChangedListener(new TextWatcher()
 		{
 
-			@Override
-			public void afterTextChanged(Editable editable) {
-				
-			}
 
-			@Override
-			public void beforeTextChanged(CharSequence s, int start,
-					int count, int after) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				Cnstock.setUsername(s+"");
 				Editor editor = sp.edit();
 				editor.putString("cnstock_username", s+"");
 				editor.commit();
+			}
+
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
 			}
 			
 		});
@@ -51,25 +50,23 @@ public class SettingAct extends Activity {
 		password.addTextChangedListener(new TextWatcher()
 		{
 
-			@Override
-			public void afterTextChanged(Editable editable) {
-				
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start,
-					int count, int after) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
 				Cnstock.setPassword(s+"");
 				Editor editor = sp.edit();
 				editor.putString("cnstock_password", s+"");
 				editor.commit();
+			}
+
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
 			}
 			
 		});

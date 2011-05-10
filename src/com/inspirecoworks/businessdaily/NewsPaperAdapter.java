@@ -30,7 +30,7 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 		this.paper = paper;
 	}
 
-	@Override
+	
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
 		View v = super.getChildView(groupPosition, childPosition, isLastChild,
@@ -42,10 +42,10 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 		
 		try{
 		String text = from.getText().toString();
-		if(text.length() == 0)from.setText("ÕýÔÚÔØÈë...");
+		if(text.length() == 0)from.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...");
 		}catch(Exception ex)
 		{
-			from.setText("ÕýÔÚÔØÈë...");
+			from.setText("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...");
 		}
 		final Article a = (Article) this.getChild(groupPosition, childPosition);
 		if(a.getBody()!=null && a.getBody().length()>5)
@@ -56,7 +56,7 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 		
 		paper.readArticle(groupPosition, a.getTitle(), new OnArticleListener(){
 
-			@Override
+			
 			public void onDone() {
 				if(a.getBody()!=null && a.getBody().length()>5)
 				{
@@ -64,13 +64,13 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 				}
 			}
 
-			@Override
+			
 			public void onException(String t) {
 				// TODO Auto-generated method stub
 				
 			}
 
-			@Override
+			
 			public void onStatus(String s) {
 				a.setFrom(s);
 				NewsPaperAdapter.this.notifyDataSetChanged();
@@ -81,7 +81,7 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 		return v;
 	}
 
-	@Override
+	
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub

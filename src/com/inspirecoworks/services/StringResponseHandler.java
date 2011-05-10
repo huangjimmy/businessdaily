@@ -24,7 +24,8 @@ public class StringResponseHandler implements ResponseHandler<String> {
 		super();
 		this.handler = handler;
 	}
-	@Override
+
+
 	public String handleResponse(HttpResponse response)
 			throws ClientProtocolException, IOException {
 		

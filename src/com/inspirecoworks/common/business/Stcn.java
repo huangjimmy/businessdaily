@@ -10,7 +10,7 @@ public class Stcn extends NewsPaper  implements Serializable{
 
 	Pattern about_p = Pattern.compile("<div class=\"from\">([^<>]+)</div>");
 	//Pattern text_p = Pattern.compile("[</founder-content>|<???enpcontent??>]([[<P>]|[</P>]|[<p>]|[</p>]|[^<>]]+)[</founder-content>|<???/enpcontent??>]");
-	Pattern text_p = Pattern.compile("((<founder-content>)|(<!-- ===============================文章内容 ================================= -->))([[<P>]|[</P>]|[<p>]|[</p>]|[^<>]]+)((<!-- ===========================文章内容end ========================================= -->)|(</founder-content>))");
+	Pattern text_p = Pattern.compile("((<founder-content>)|(<!-- =============================== 鐗堥潰鐩綍start ================================= -->))([[<P>]|[</P>]|[<p>]|[</p>]|[^<>]]+)((<!-- =========================== 鐗堥潰鐩綍end ========================================= -->)|(</founder-content>))");
 	
 	
 	public Stcn() {
@@ -21,7 +21,7 @@ public class Stcn extends NewsPaper  implements Serializable{
 	@Override
 	public String paperName() {
 		// TODO Auto-generated method stub
-		return "证券时报";
+		return "璇佸埜鏃舵姤";
 	}
 	/**
 	 * 
@@ -50,7 +50,7 @@ public class Stcn extends NewsPaper  implements Serializable{
 
 	@Override
 	protected Pattern getTitlePattern() {
-		return Pattern.compile("<a href=([content|node][^\\s<>]+)[\\s]*[^\\s<>]*>([[a-zA-Z]*[0-9]+]*：)*(([^<>]|(<BR/>)|(<BR>))+)</a>");
+		return Pattern.compile("<a href=([content|node][^\\s<>]+)[\\s]*[^\\s<>]*>([[a-zA-Z]*[0-9]+]*锟斤拷)*(([^<>]|(<BR/>)|(<BR>))+)</a>");
 	}
 
 	protected int getFromIndex()
@@ -75,11 +75,11 @@ public class Stcn extends NewsPaper  implements Serializable{
 
 	@Override
 	protected String getBodyEnd() {
-		return "版面目录end";
+		return "鐗堥潰鐩綍end";
 	}
 
 	@Override
 	protected String getBodyStart() {
-		return "版面目录start";
+		return "鐗堥潰鐩綍start";
 	}
 }

@@ -45,7 +45,6 @@ public class UrlDownCallable implements Callable<String>
 		this.data = data;
 		
 	}
-	@Override
 	public String call() throws Exception {
 		if(client == null){
 			// Create and initialize HTTP parameters

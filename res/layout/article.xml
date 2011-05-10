@@ -9,8 +9,9 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	  android:layout_width="fill_parent"
 	  android:layout_height="fill_parent" android:orientation="vertical">
-      <TextView android:id="@+id/from" android:layout_width="fill_parent" android:layout_height="wrap_content"/>
-      <TextView android:id="@+id/body" android:layout_width="fill_parent" android:layout_height="fill_parent"/>
+      <TextView android:id="@+id/from" android:layout_width="fill_parent" android:layout_height="wrap_content" android:text="2011-01-15 来源：证券时报网 作者：郑晓波  "/>
+      <TextView android:id="@+id/body" android:layout_width="fill_parent" android:layout_height="fill_parent"  android:text="●抓紧启动中关村试点范围扩大工作，加快建设统一监管的全国性场外市场　
+●深入推进债券发行监管改革，显著增加债券融资规模  "/>
       </LinearLayout>
 </ScrollView>
 </LinearLayout>

@@ -23,6 +23,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.app.Activity;
+import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 import android.widget.BaseExpandableListAdapter;
@@ -36,7 +37,7 @@ import com.inspirecoworks.services.NotifyHandler;
 public abstract class NewsPaper implements Serializable {
 
 	private transient Context context;
-	BaseExpandableListAdapter adapter;
+	//BaseExpandableListAdapter adapter;
 	
 	public void setContext(Context context){this.context = context;}
 	/**
@@ -47,7 +48,37 @@ public abstract class NewsPaper implements Serializable {
 	protected Vector<String> titles = new Vector<String>();
 	int _year, _month, _day;
 
-	public BaseExpandableListAdapter getAdapter(Activity context)
+	public int getYear() {
+		return _year;
+	}
+
+
+	public void setYear(int _year) {
+		this._year = _year;
+	}
+
+
+	public int getMonth() {
+		return _month;
+	}
+
+
+	public void setMonth(int _month) {
+		this._month = _month;
+	}
+
+
+	public int getDay() {
+		return _day;
+	}
+
+
+	public void setDay(int _day) {
+		this._day = _day;
+	}
+
+
+	/*public BaseExpandableListAdapter getAdapter(Activity context)
 	{
 		
 		List<Map<String, Object>> groupData;
@@ -82,7 +113,7 @@ public abstract class NewsPaper implements Serializable {
         
 		//adapter.setNewsPaper(this);
 		return adapter;
-	}
+	}*/
 	
 	
 	public NewsPaper()
@@ -94,6 +125,10 @@ public abstract class NewsPaper implements Serializable {
 	public List<String> listSections()
 	{
 		return titles;
+	}
+	public Vector<Section> getSections()
+	{
+		return sections;
 	}
 
 	
@@ -199,7 +234,7 @@ public abstract class NewsPaper implements Serializable {
 					Log.i(paper.getClass().getSimpleName(), "Newspaper data downloaded.");
 					if(content.contains("Exception") && content.contains("Form_"))
 					{
-						listener.onException("·şÎñÆ÷´íÎó");
+						listener.onException("ç™»å½•å‘ç”Ÿé”™è¯¯");
 						return;
 					}
 					else if(paper.needLogin(content))
@@ -219,7 +254,7 @@ public abstract class NewsPaper implements Serializable {
 					else
 					{
 						Log.i(paper.getClass().getSimpleName(),":paper data incorrect");
-						listener.onException("¶ÁÈ¡±¨Ö½Êı¾İ·¢Éú´íÎó.");
+						listener.onException("æŠ¥çº¸æ•°æ®ä¸æ­£ç¡®.");
 					}
 					
 				} catch (Exception e) {
@@ -254,7 +289,7 @@ public abstract class NewsPaper implements Serializable {
 		};
 		
 		final DownloadTask task = new DownloadTask(url, new NotifyHandler(receiver));
-		//TODO ¶ÁÈ¡httpÁ´½ÓÄÚÈİ
+		//TODO ï¿½ï¿½È¡httpï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 		Log.i(paper.getClass().getSimpleName(),"start downloading newspaper");
 		String content = this.readCache(url);
 		
@@ -277,7 +312,7 @@ public abstract class NewsPaper implements Serializable {
     protected boolean populatePaper(String body, String base_url)
     {
         int content_start = body.indexOf(getBodyStart());//;"<div id=\"nlist\">");
-		int content_end = body.indexOf(getBodyEnd());//"°æÃæÄ¿Â¼end");
+		int content_end = body.indexOf(getBodyEnd());//"ï¿½ï¿½ï¿½ï¿½Ä¿Â¼end");
 		
 		if(content_start < 0)content_start = 0;
 		
@@ -295,8 +330,8 @@ public abstract class NewsPaper implements Serializable {
 		Section cur = null;
 		while(m.find())
 		{
-			String section = m.group(this.getTitleIndex()).replace("<BR>", "\r\n")
-			.replace("<BR/>", "\r\n");
+			String section = m.group(this.getTitleIndex());//.replace("<BR>", "\r\n")
+			//.replace("<BR/>", "\r\n");
 			 if(isSectionLink(m.group(this.getLinkIndex())))
 			 {
 				 cur = new Section();
@@ -366,7 +401,7 @@ public abstract class NewsPaper implements Serializable {
 			@Override
 			public void onException(String t) {
 				Log.i(NewsPaper.this.getClass().getSimpleName(),":login exception:"+t);
-				listener.onException("¶ÁÈ¡Êı¾İ´íÎó");
+				listener.onException("ç™»å½•å‘ç”Ÿé”™è¯¯");
 			}
 
 			@Override
@@ -383,7 +418,7 @@ public abstract class NewsPaper implements Serializable {
 
 			@Override
 			public void onBefore(Runnable task) {
-				listener.onStatus("µÇÂ½ÖĞ...");
+				listener.onStatus("ï¿½ï¿½Â½ï¿½ï¿½...");
 			}
 			
 		};
@@ -423,7 +458,7 @@ public abstract class NewsPaper implements Serializable {
 			@Override
 			public void OnDownloading(int bytesRecv, int size) {
 				article.setFrom(bytesRecv+"bytes("+size+" bytes) received.");
-				adapter.notifyDataSetChanged();
+				//adapter.notifyDataSetChanged();
 				
 			}
 
@@ -435,7 +470,7 @@ public abstract class NewsPaper implements Serializable {
 
 			@Override
 			public void onBefore(Runnable task) {
-				listener.onStatus("¿ªÊ¼ÏÂÔØ");
+				listener.onStatus("å¼€å§‹ä¸‹è½½");
 			}
 			
 		};
@@ -445,8 +480,10 @@ public abstract class NewsPaper implements Serializable {
 					new DownloadTask(url, new NotifyHandler(receiver)):
 					new DownloadTask(context, cache_file, new NotifyHandler(receiver));
 		
+		
 		loginReceiver.nextTask = task;
 		receiver.nextTask = loginTask;
+
 		this.executor.submit(task);
 	}
 
@@ -501,7 +538,7 @@ public abstract class NewsPaper implements Serializable {
 		m = text_p.matcher(content);
 		if(m.find())
 		{
-			article.setBody(m.group(getBodyIndex()).replaceAll("<[/]*[P|p]>", "\r\n").replaceAll("<[B|b][R|r][/]*>", "\r\n").replaceAll("<[^<>]+>", "").replace("&nbsp;", " ").replace("&gt;", ">").trim());
+			article.setBody(m.group(getBodyIndex()));//.replaceAll("<[/]*[P|p]>", "\r\n").replaceAll("<[B|b][R|r][/]*>", "\r\n").replaceAll("<[^<>]+>", "").replace("&nbsp;", " ").replace("&gt;", ">").trim());
 			article.setPreview(article.getBody().replace("</P>", "").replace("</p>", "").replaceAll("<[^<>]+>", "\r\n").replaceAll("&nbsp;", " ").replace("\r\n\r\n", "\r\n").trim());
 			if(article.getPreview().length() > 100){
 				article.setPreview(article.getPreview().substring(0,100));

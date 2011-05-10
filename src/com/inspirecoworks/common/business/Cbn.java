@@ -16,7 +16,7 @@ public class Cbn extends NewsPaper implements Serializable {
 	@Override
 	public String paperName() {
 		// TODO Auto-generated method stub
-		return "µÚÒ»²Æ¾­";
+		return "ç¬¬ä¸€è´¢ç»";
 	}
 	/**
 	 * 
@@ -56,7 +56,7 @@ public class Cbn extends NewsPaper implements Serializable {
 	@Override
 	protected Pattern getFromPattern() {
 		
-		return Pattern.compile("<p[^<]+>([^<]+À´Ô´[^<>]+((<a[^<>]+>[^<>]+</a>)|[^<>]+)*)</p>");
+		return Pattern.compile("<p[^<]+>([^<]+ï¿½ï¿½Ô´[^<>]+((<a[^<>]+>[^<>]+</a>)|[^<>]+)*)</p>");
 	}
 
 	@Override
@@ -71,8 +71,8 @@ public class Cbn extends NewsPaper implements Serializable {
 
 	@Override
 	protected Pattern getTitlePattern() {
-		//<a href="/category.jsp?pcid=15938256">Í·°æ</a>
-		//<a href="/article.jsp?oid=75697187">Å·ÖŞ´óÑ©»ú³¡²»¿°Ò»»÷£¿</a>
+		//<a href="/category.jsp?pcid=15938256">Í·ï¿½ï¿½</a>
+		//<a href="/article.jsp?oid=75697187">Å·ï¿½Ş´ï¿½Ñ©ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½</a>
 		return Pattern.compile("<a href=\"(/(article|category).jsp?[^<>]+)\">([^<>]+)</a>");
 	}
 
@@ -84,7 +84,7 @@ public class Cbn extends NewsPaper implements Serializable {
 
 	@Override
 	protected String getBodyStart() {
-		return "ÕıÎÄ</div>";
+		return "ï¿½ï¿½ï¿½ï¿½</div>";
 	}
 
 }

@@ -29,7 +29,7 @@ public class PaperAdapter extends BaseAdapter {
 
 	Activity home;
 	View[] inprogress = new View[3];
-	String[] paper_names = new String[]{"ÉÏº£Ö¤È¯±¨","Ö¤È¯Ê±±¨", "µÚÒ»²Æ¾­"};
+	String[] paper_names = new String[]{"ä¸Šæµ·è¯åˆ¸æŠ¥","è¯åˆ¸æ—¶æŠ¥", "ç¬¬ä¸€è´¢ç»"};
 	Calendar[] paper_dates = new Calendar[]{Calendar.getInstance(), Calendar.getInstance(),
 			Calendar.getInstance()};
 	NewsPaper[] papers = new NewsPaper[]{new Cnstock(), new Stcn(), new Cbn()};
@@ -87,136 +87,29 @@ public class PaperAdapter extends BaseAdapter {
     	else paper_views[position] = home.getLayoutInflater().inflate(R.layout.paper_view, null);
     	
     	View v = paper_views[position];
-    	final ExpandableListView elv = (ExpandableListView) v.findViewById(R.id.page_list);
-    	final View progress = v.findViewById(R.id.paper_progress);
-    	elv.setTag(papers[position]);//½«±¨Ö½¶ÔÏó´æ·ÅÔÚTagÖÐ¡£
-    	TextView paper_title = (TextView) v.findViewById(R.id.paper_title);
-    	TextView paper_date = (TextView) v.findViewById(R.id.paper_date);
-    	paper_title.setText(paper_names[position]);
-    	paper_date.setText(DateFormat.format("yyyy-MM-dd", paper_dates[position]));    	
+    	
+    	final PaperView paper_view = (PaperView) v.findViewById(R.id.paper_view);
+    	
     	
     	
     	final NewsPaper paper = papers[position];
-    	final View v1 = v;
+
     	NewsPaper.OnPaperListener listener = new NewsPaper.OnPaperListener()
     	{
 
 			public void onDone() {
 				Log.i(paper.getClass().getSimpleName(), "Show newspaper");
-				elv.setAdapter(paper.getAdapter(home));
-				progress.setVisibility(View.GONE);
+	
+				paper_view.setNewspaper(paper);
 			}
 
-			@Override
+	
 			public void onException(String t) {
-				TextView paper_date = (TextView) v1.findViewById(R.id.paper_date);
-				paper_date.setText("·¢Éú¶ÁÈ¡´íÎó:"+t);
+				//TextView paper_date = (TextView) v1.findViewById(R.id.paper_date);
+				//paper_date.setText("å‘ç”Ÿå¼‚å¸¸:"+t);
 			}
     		
     	};
-    	
-    	elv.setOnChildClickListener(new OnChildClickListener(){
-
-			@Override
-			public boolean onChildClick(ExpandableListView parent, View v,
-					int group, int child, long id) {
-
-				final Article article = (Article) elv.getExpandableListAdapter().getChild(group, child);
-		        final BaseExpandableListAdapter adapter = (BaseExpandableListAdapter) elv.getExpandableListAdapter();
-		        if(article.getBody() == null || article.getBody().trim().length() == 0)
-				{
-		        	NewsPaper paper = (NewsPaper) elv.getTag();
-		        	paper.readArticle(group, article.getTitle(), new OnArticleListener(){
-
-						@Override
-						public void onDone() {
-							if(article.getBody()!=null && article.getBody().length()>5)
-							{
-								adapter.notifyDataSetChanged();
-							}
-							else
-							{
-								Log.i("READ", article.getTitle()+": ERROR content incorrect");
-								onException("¶ÁÈ¡Êý¾Ý´íÎó");
-							}
-						}
-
-						@Override
-						public void onException(String t) {
-							//article reading
-							article.setFrom(t);
-							adapter.notifyDataSetChanged();
-							Log.i("READ", article.getTitle()+": "+t);
-							//retry in case of exception after five seconds
-							//paper.readArticle(group, a.getTitle(), this);
-						}
-
-						@Override
-						public void onStatus(String s) {
-							article.setFrom(s);
-							adapter.notifyDataSetChanged();
-						}
-						
-					});
-					return false;
-				}
-		        Intent intent = new Intent(home, Reader.class);
-		        intent.putExtra("article", article);
-		        home.startActivity(intent);
-		        elv.focusableViewAvailable(v);
-				return false;
-			}
-    		
-    	});
-    	
-    	elv.setOnGroupExpandListener(new OnGroupExpandListener(){
-
-			@Override
-			public void onGroupExpand(int groupPosition) {
-				final BaseExpandableListAdapter adapter = 
-					(BaseExpandableListAdapter)elv.getExpandableListAdapter();
-				final NewsPaper paper = (NewsPaper) elv.getTag();
-				Section s = paper.readSectionAt(groupPosition);
-				
-				final int group = groupPosition;
-				
-				for(final Article a:s.values())
-				paper.readArticle(groupPosition, a.getTitle(), new OnArticleListener(){
-
-					@Override
-					public void onDone() {
-						if(a.getBody()!=null && a.getBody().length()>5)
-						{
-							adapter.notifyDataSetChanged();
-						}
-						else
-						{
-							Log.i("READ", a.getTitle()+": ERROR content incorrect");
-							onException("¶ÁÈ¡Êý¾Ý´íÎó");
-						}
-					}
-
-					@Override
-					public void onException(String t) {
-						//article reading
-						a.setFrom(t);
-						adapter.notifyDataSetChanged();
-						Log.i("READ", a.getTitle()+": "+t);
-						//retry in case of exception after five seconds
-						//paper.readArticle(group, a.getTitle(), this);
-					}
-
-					@Override
-					public void onStatus(String s) {
-						a.setFrom(s);
-						adapter.notifyDataSetChanged();
-					}
-					
-				});
-				
-			}
-    		
-    	});
     	
     	int year, month, day;
     	year = paper_dates[position].get(Calendar.YEAR);

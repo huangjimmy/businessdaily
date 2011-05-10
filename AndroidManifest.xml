@@ -15,6 +15,7 @@
 		<activity android:name=".Reader" android:screenOrientation="portrait"/>
 		<activity android:name="com.mobclick.android.UmengFeedback"></activity>
 		<activity android:name=".SettingAct" android:screenOrientation="portrait"/>
+		<view class="com.inspirecoworks.businessdaily.ArticleView"/>
 		
 <meta-data android:value="4d1aafa53ea7a350d4003e9b" android:name="UMENG_APPKEY"></meta-data>
     </application>

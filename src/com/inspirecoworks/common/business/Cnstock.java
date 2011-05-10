@@ -21,7 +21,7 @@ import org.apache.http.message.BasicNameValuePair;
 import android.app.Activity;
 import android.content.Context;
 
-//ĞèÒªµÇÂ½ÁË
+//ä¸Šæµ·è¯åˆ¸æŠ¥
 //http://passport.cnstock.com/http/formlogin.aspx
 //name, password
 public class Cnstock extends NewsPaper implements Serializable {
@@ -34,7 +34,7 @@ public class Cnstock extends NewsPaper implements Serializable {
 	@Override
 	public String paperName() {
 		// TODO Auto-generated method stub
-		return "ÉÏº£Ö¤È¯±¨";
+		return "ä¸Šæµ·è¯åˆ¸æŠ¥";
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class Cnstock extends NewsPaper implements Serializable {
 		return content.contains("http://passport.cnstock.com/http/formlogin.aspx");
 	}
 	
-	//ĞèÒªµÇÂ½ÁË
+	//ç™»å½•ä¸Šæµ·è¯åˆ¸æŠ¥
 	//http://passport.cnstock.com/http/formlogin.aspx
 	//name, password
 	
