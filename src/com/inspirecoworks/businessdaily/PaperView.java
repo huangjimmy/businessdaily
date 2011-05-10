@@ -102,23 +102,12 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 		return newspaper;
 	}
 
-	public boolean onChildClick1(ExpandableListView parent, View v,
-			int groupPosition, int childPosition, long id) {
-	
-		Article article = (Article) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
-		
-		Intent intent = new Intent(context, Reader.class);
-		intent.putExtra("article", article);
-		context.startActivity(intent);
-		return false;
-	}
-
 	
 		public boolean onChildClick(ExpandableListView parent, View v,
 				int group, int child, long id) {
 
-			final Article article = (Article) parent.getExpandableListAdapter().getChild(group, child);
-	        final BaseExpandableListAdapter adapter = (BaseExpandableListAdapter) parent.getExpandableListAdapter();
+			Article article = (Article) parent.getExpandableListAdapter().getChild(group, child);
+	        /*final BaseExpandableListAdapter adapter = (BaseExpandableListAdapter) parent.getExpandableListAdapter();
 	        if(article.getBody() == null || article.getBody().trim().length() == 0)
 			{
 	        	NewsPaper paper = newspaper;
@@ -155,7 +144,7 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 					
 				});
 				return false;
-			}
+			}*/
 	        Intent intent = new Intent(context, Reader.class);
 	        intent.putExtra("article", article);
 	        
@@ -170,9 +159,12 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 				(BaseExpandableListAdapter)listview_paper.getExpandableListAdapter();
 			final NewsPaper paper = newspaper;
 			Section s = paper.readSectionAt(groupPosition);
-			
+			if(s.isEmpty())
+			{
+				this.listview_paper.setVisibility(GONE);
+			}
 		
-			for(final Article a:s.values())
+			/*for(final Article a:s.values())
 			paper.readArticle(groupPosition, a.getTitle(), new OnArticleListener(){
 
 				
@@ -204,7 +196,7 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 					adapter.notifyDataSetChanged();
 				}
 				
-			});
+			});*/
 			
 		}
 

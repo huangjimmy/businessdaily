@@ -4,7 +4,10 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.io.StringBufferInputStream;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
@@ -17,10 +20,19 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.app.DownloadManager;
@@ -172,59 +184,7 @@ public abstract class NewsPaper implements Serializable {
 		final String url = getHomeLink(year, month, day);
 		final NewsPaper paper = this;
 		
-		NotifyHandler.ResultReceiver loginReceiver = new NotifyHandler.ResultReceiver(){
-		
-			@Override
-			public void onDone(String loginResult) {
-				try {
-					//String loginResult = loginTask.get();
-					if(needLogin(loginResult))
-					{
-						Log.i(paper.getClass().getSimpleName(),":login failed");
-						listener.onException("login failed.");
-					}
-					else
-					{
-						/*Log.i(paper.getClass().getSimpleName(),":login success");
-						Log.i(paper.getClass().getSimpleName(),":parsing paper data...");
-						paper.populatePaper(loginResult, base_url);
-						Log.i(paper.getClass().getSimpleName(),":paper data parsed");
-						listener.onDone();*/
-						executor.submit(nextTask);
-					}
-				} catch (Exception e) {
-					Log.i(paper.getClass().getSimpleName(),":login Exception:"+e.getLocalizedMessage());
-					e.printStackTrace();
-					listener.onException(e.getLocalizedMessage());
-				} 
-				
-			}
-
-			@Override
-			public void onException(String t) {
-				Log.i(paper.getClass().getSimpleName(),":login exception:"+t);
-			}
-
-			@Override
-			public void OnDownloading(int bytesRecv, int size) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onAfter(Runnable task) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onBefore(Runnable task) {
-				
-			}
-			
-		};
-		DownloadTask loginTask = new DownloadTask(paper.getLoginUrl(), paper.getLoginEntity(), url,
-				new NotifyHandler(loginReceiver)); 
+	
 		
 		NotifyHandler.ResultReceiver receiver = new NotifyHandler.ResultReceiver(){
 			@Override
@@ -232,17 +192,7 @@ public abstract class NewsPaper implements Serializable {
 				try {
 					//String content = task.get();
 					Log.i(paper.getClass().getSimpleName(), "Newspaper data downloaded.");
-					if(content.contains("Exception") && content.contains("Form_"))
-					{
-						listener.onException("登录发生错误");
-						return;
-					}
-					else if(paper.needLogin(content))
-					{
-						Log.i(paper.getClass().getSimpleName(),":logging in");
-						executor.submit(nextTask);
-						return;
-					}
+					
 					 
 					Log.i(paper.getClass().getSimpleName(),":parsing paper data...");
 					if(paper.populatePaper(content, base_url))
@@ -289,7 +239,7 @@ public abstract class NewsPaper implements Serializable {
 		};
 		
 		final DownloadTask task = new DownloadTask(url, new NotifyHandler(receiver));
-		//TODO ��ȡhttp��������
+
 		Log.i(paper.getClass().getSimpleName(),"start downloading newspaper");
 		String content = this.readCache(url);
 		
@@ -297,8 +247,7 @@ public abstract class NewsPaper implements Serializable {
 			listener.onDone();
 		}
 		else{
-			loginReceiver.nextTask = task;
-			receiver.nextTask = loginTask;
+		
 			this.executor.submit(task);
 		}
 		
@@ -311,43 +260,39 @@ public abstract class NewsPaper implements Serializable {
 
     protected boolean populatePaper(String body, String base_url)
     {
-        int content_start = body.indexOf(getBodyStart());//;"<div id=\"nlist\">");
-		int content_end = body.indexOf(getBodyEnd());//"����Ŀ¼end");
-		
-		if(content_start < 0)content_start = 0;
-		
-		if(content_end < 0)content_end = body.length()-1;
-		
-		body = body.substring(content_start, content_end);
-
-		
 		this.sections.clear();
 		this.titles.clear();
 		
-		Pattern p = getTitlePattern();
-		Matcher m = p.matcher(body);
-		
-		Section cur = null;
-		while(m.find())
-		{
-			String section = m.group(this.getTitleIndex());//.replace("<BR>", "\r\n")
-			//.replace("<BR/>", "\r\n");
-			 if(isSectionLink(m.group(this.getLinkIndex())))
-			 {
-				 cur = new Section();
-				 cur.title = section;
-				 cur.link = base_url+m.group(this.getLinkIndex());
-				 sections.add(cur);
-				 titles.add(section);
-			 }
-			 else
-			 {
-				 Article a = new Article();
-				 a.setLink(base_url+m.group(this.getLinkIndex()));
-				 a.setTitle(section);
-				 cur.put(section, a);
-			 }
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		try {
+			db = dbf.newDocumentBuilder();
+			Document doc = db.parse(new InputSource(new StringReader(body)));
+			doc.getDocumentElement().normalize();
+			NodeList list = doc.getDocumentElement().getChildNodes();
+			for(int i=0; i< list.getLength(); i++)
+			{
+				Node c = list.item(i);
+				String id = c.getChildNodes().item(0).getTextContent();
+				String name = c.getChildNodes().item(1).getTextContent();
+				Section s = new Section();
+				s.title = name;
+				s.link = id;
+				sections.add(s);
+				titles.add(name);
+			}
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		
 		
 		return !titles.isEmpty();
 	}
@@ -375,55 +320,6 @@ public abstract class NewsPaper implements Serializable {
 
 		final String cache_file = NewsPaper.this.locateCache(url);
 		
-		NotifyHandler.ResultReceiver loginReceiver = new NotifyHandler.ResultReceiver(){
-			
-			@Override
-			public void onDone(String loginResult) {
-				try {
-					//String loginResult = loginTask.get();
-					if(needLogin(loginResult))
-					{
-						Log.i(NewsPaper.this.getClass().getSimpleName(),":login failed");
-						listener.onException("login failed.");
-					}
-					else
-					{
-						executor.submit(nextTask);
-					}
-				} catch (Exception e) {
-					Log.i(NewsPaper.this.getClass().getSimpleName(),":login Exception:"+e.getLocalizedMessage());
-					e.printStackTrace();
-					listener.onException(e.getLocalizedMessage());
-				} 
-				
-			}
-
-			@Override
-			public void onException(String t) {
-				Log.i(NewsPaper.this.getClass().getSimpleName(),":login exception:"+t);
-				listener.onException("登录发生错误");
-			}
-
-			@Override
-			public void OnDownloading(int bytesRecv, int size) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onAfter(Runnable task) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void onBefore(Runnable task) {
-				listener.onStatus("��½��...");
-			}
-			
-		};
-		DownloadTask loginTask = new DownloadTask(getLoginUrl(), getLoginEntity(), url,
-				new NotifyHandler(loginReceiver)); 
 		
 		NotifyHandler.ResultReceiver receiver = new NotifyHandler.ResultReceiver(){
 
@@ -480,10 +376,6 @@ public abstract class NewsPaper implements Serializable {
 					new DownloadTask(url, new NotifyHandler(receiver)):
 					new DownloadTask(context, cache_file, new NotifyHandler(receiver));
 		
-		
-		loginReceiver.nextTask = task;
-		receiver.nextTask = loginTask;
-
 		this.executor.submit(task);
 	}
 

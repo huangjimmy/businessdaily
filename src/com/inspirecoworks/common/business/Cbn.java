@@ -66,7 +66,7 @@ public class Cbn extends NewsPaper implements Serializable {
 
 	@Override
 	protected String getHomeLink(int year, int month, int day) {
-		return String.format("http://dycj.ynet.com/index.jsp?pdid=%d-%02d-%02d", year, month, day);
+		return String.format("http://210.51.3.35/NewsPaper/column.php?year=%d&mon=%d&day=%d&type=3", year,month,day);
 	}
 
 	@Override

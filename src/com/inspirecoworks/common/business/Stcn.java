@@ -45,7 +45,7 @@ public class Stcn extends NewsPaper  implements Serializable{
 
 	@Override
 	protected String getHomeLink(int year, int month, int day) {
-		return getBaseUrl(year,month,day)+"node_2.htm";
+		return String.format("http://210.51.3.35/NewsPaper/column.php?year=%d&mon=%d&day=%d&type=2", year,month,day);
 	}
 
 	@Override
