@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.StringBufferInputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
@@ -35,7 +34,6 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
-import android.app.DownloadManager;
 import android.content.Context;
 import android.util.Log;
 import android.widget.BaseExpandableListAdapter;
