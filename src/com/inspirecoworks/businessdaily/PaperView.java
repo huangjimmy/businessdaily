@@ -9,6 +9,7 @@ import com.inspirecoworks.common.business.Article;
 import com.inspirecoworks.common.business.NewsPaper;
 import com.inspirecoworks.common.business.Section;
 import com.inspirecoworks.common.business.NewsPaper.OnArticleListener;
+import com.mobclick.android.MobclickAgent;
 
 import android.app.Activity;
 import android.content.Context;
@@ -31,6 +32,8 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 	private TextView textview_paper_title;
 	private TextView textview_paper_date;
 	private Context context;
+	private View progress;
+	private TextView textview_progress;
 	
 	private NewsPaper newspaper ;
 	
@@ -47,6 +50,8 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 		listview_paper = (ExpandableListView) findViewById(R.id.page_list);
 		textview_paper_title = (TextView) findViewById(R.id.paper_title);
 		textview_paper_date = (TextView) findViewById(R.id.paper_date);
+		progress = findViewById(R.id.progress_info_layout);
+		textview_progress = (TextView) findViewById(R.id.progress_info_text);
 		super.onFinishInflate();
 	}
 
@@ -60,39 +65,12 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 		this.textview_paper_title.setText(newspaper.paperName());
 		this.textview_paper_date.setText(String.format("%d-%d-%d", newspaper.getYear(), newspaper.getMonth(), newspaper.getDay()));
 		
-		List<Map<String, Object>> groupData;
-		List<Map<String, Object>> child;
-		List<List<Map<String, Object>>> childData;
+		NewsPaperAdapter adapter = new NewsPaperAdapter(context, newspaper);
+		listview_paper.setAdapter(adapter);
 		
-		groupData = new Vector<Map<String, Object>>();
-        childData = new Vector<List<Map<String, Object>>>();
-     
-        for(Section s:newspaper.getSections())
-        {
-        	Map<String, Object> group = new LinkedHashMap<String, Object>();
-        	child = new Vector<Map<String, Object>>();
-        	for(String atitle:s.keySet())
-        	{
-                child.add(s.get(atitle));
-        	}
-        	group.put("TITLE", s.title);
-        	groupData.add(group);
-        	childData.add(child);
-        }
-        
-        String[] groupFrom = new String[]{"TITLE"};
-        int[] groupTo = new int[]{R.id.page_name};
-        String[] childFrom = new String[]{Article.TITLE,Article.PREVIEW,Article.FROM};
-        int[] childTo = new int[]{R.id.article_title,R.id.article_preview,R.id.article_from};
-        
-        SimpleExpandableListAdapter adapter = new SimpleExpandableListAdapter(context, 
-				groupData, R.layout.page_item, groupFrom, groupTo,
-				childData, R.layout.article_item, childFrom, childTo);
-        
-        listview_paper.setAdapter(adapter);
-        
         listview_paper.setOnChildClickListener(this);
         listview_paper.setOnGroupExpandListener(this);
+        progress.setVisibility(GONE);
 	}
 
 	/**
@@ -103,102 +81,61 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 	}
 
 	
-		public boolean onChildClick(ExpandableListView parent, View v,
-				int group, int child, long id) {
-
-			Article article = (Article) parent.getExpandableListAdapter().getChild(group, child);
-	        /*final BaseExpandableListAdapter adapter = (BaseExpandableListAdapter) parent.getExpandableListAdapter();
-	        if(article.getBody() == null || article.getBody().trim().length() == 0)
-			{
-	        	NewsPaper paper = newspaper;
-	        	paper.readArticle(group, article.getTitle(), new OnArticleListener(){
-
-
-					public void onDone() {
-						if(article.getBody()!=null && article.getBody().length()>5)
-						{
-							adapter.notifyDataSetChanged();
-						}
-						else
-						{
-							Log.i("READ", article.getTitle()+": ERROR content incorrect");
-							onException("读取错误");
-						}
-					}
-
-					
-					public void onException(String t) {
-						//article reading
-						article.setFrom(t);
-						adapter.notifyDataSetChanged();
-						Log.i("READ", article.getTitle()+": "+t);
-						//retry in case of exception after five seconds
-						//paper.readArticle(group, a.getTitle(), this);
-					}
-
-					
-					public void onStatus(String s) {
-						article.setFrom(s);
-						adapter.notifyDataSetChanged();
-					}
-					
-				});
-				return false;
-			}*/
-	        Intent intent = new Intent(context, Reader.class);
-	        intent.putExtra("article", article);
-	        
-	        context.startActivity(intent);
-	        //elv.focusableViewAvailable(v);
-			return false;
-		}
+	public boolean onChildClick(ExpandableListView parent, View v,
+			int group, int child, long id) {
 	
-	
-		public void onGroupExpand(int groupPosition) {
-			final BaseExpandableListAdapter adapter = 
-				(BaseExpandableListAdapter)listview_paper.getExpandableListAdapter();
-			final NewsPaper paper = newspaper;
-			Section s = paper.readSectionAt(groupPosition);
-			if(s.isEmpty())
-			{
-				this.listview_paper.setVisibility(GONE);
-			}
+		Article article = (Article) parent.getExpandableListAdapter().getChild(group, child);
 		
-			/*for(final Article a:s.values())
-			paper.readArticle(groupPosition, a.getTitle(), new OnArticleListener(){
+	    Intent intent = new Intent(context, Reader.class);
+	    intent.putExtra("article", article);
+	    
+	    MobclickAgent.onEvent(context, "Read News Started.");
+	    context.startActivity(intent);
+	    MobclickAgent.onEvent(context, "Read News Doned.");
+		return false;
+	}
+	
+	
+	public void onGroupExpand(int groupPosition) {
+		final BaseExpandableListAdapter adapter = 
+			(BaseExpandableListAdapter)listview_paper.getExpandableListAdapter();
+		final NewsPaper paper = newspaper;
+		final int group = groupPosition;
+		Section s = paper.readSectionAt(groupPosition);
+		if(s.isEmpty())
+		{
+			this.textview_progress.setText(R.string.inprogress);
+			this.progress.setVisibility(VISIBLE);
+
+			paper.readArticle(groupPosition, s.link, new OnArticleListener(){
 
 				
 				public void onDone() {
-					if(a.getBody()!=null && a.getBody().length()>5)
-					{
-						adapter.notifyDataSetChanged();
-					}
-					else
-					{
-						Log.i("READ", a.getTitle()+": ERROR content incorrect");
-						onException("读取文章错误");
-					}
+					adapter.notifyDataSetChanged();
+					PaperView.this.textview_progress.setText(R.string.inprogress);
+					progress.setVisibility(GONE);
+					
 				}
 
 				
 				public void onException(String t) {
 					//article reading
-					a.setFrom(t);
+					
 					adapter.notifyDataSetChanged();
-					Log.i("READ", a.getTitle()+": "+t);
-					//retry in case of exception after five seconds
-					//paper.readArticle(group, a.getTitle(), this);
+					listview_paper.setVisibility(VISIBLE);
+				
 				}
 
 				
 				public void onStatus(String s) {
-					a.setFrom(s);
+					PaperView.this.textview_progress.setText(s);
 					adapter.notifyDataSetChanged();
 				}
 				
-			});*/
-			
+			});
 		}
+		
+	}
 
 	
 }

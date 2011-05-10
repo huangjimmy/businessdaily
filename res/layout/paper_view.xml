@@ -37,12 +37,8 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="match_parent"
   android:layout_gravity="center_vertical|center_horizontal" android:layout_weight="1" android:layout_height="match_parent">
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_layout">
-        <ProgressBar android:layout_width="wrap_content" android:id="@+id/paper_progress" android:layout_height="wrap_content" android:layout_centerInParent="true"></ProgressBar>
-        <TextView android:layout_below="@id/paper_progress"  android:layout_width="wrap_content" android:layout_height="match_parent" android:id="@+id/progress_info_text" android:text="@string/inprogress" android:layout_centerInParent="true" android:textSize="36sp"></TextView>
-    </RelativeLayout>
-  
-  <ExpandableListView android:id="@+id/page_list"
+   
+   <ExpandableListView android:id="@+id/page_list"
 	android:divider="#535353" 
 	android:childDivider="@drawable/child_divider"
 	android:dividerHeight="1dp"
@@ -51,6 +47,13 @@
   android:layout_height="match_parent">
 
   </ExpandableListView>
+   
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_layout">
+        <ProgressBar android:layout_width="wrap_content" android:id="@+id/paper_progress" android:layout_height="wrap_content" android:layout_centerInParent="true"></ProgressBar>
+        <TextView android:layout_below="@id/paper_progress"  android:layout_width="wrap_content" android:layout_height="match_parent" android:id="@+id/progress_info_text" android:text="@string/inprogress" android:layout_centerInParent="true" android:textSize="36sp"></TextView>
+    </RelativeLayout>
+  
+  
   
 </FrameLayout>
 

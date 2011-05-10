@@ -303,20 +303,14 @@ public abstract class NewsPaper implements Serializable {
     	public void onException(String t);
     	public void onStatus(String s);
     }
-    public void readArticle(final int section, final String article_title, final OnArticleListener listener)
+    public void readArticle(final int section, final String section_id, final OnArticleListener listener)
     {
-    	readArticle(section, article_title, listener, false);
+    	readArticle(section, section_id, listener, false);
     }
-    public void readArticle(final int section, final String article_title, final OnArticleListener listener, boolean forceRefresh)
+    public void readArticle(final int section, final String section_id, final OnArticleListener listener, boolean forceRefresh)
 	{
-		final Article article = (Article)sections.get(section).get(article_title);
-		final String url = article.getLink();
 		
-		if(article.getBody() != null && article.getBody() != "")
-		{
-			listener.onDone();
-			return;
-		}
+		final String url = "http://210.51.3.35/NewsPaper/article.php?id="+section_id;
 
 		final String cache_file = NewsPaper.this.locateCache(url);
 		
@@ -328,18 +322,10 @@ public abstract class NewsPaper implements Serializable {
 				try {
 					if(cache_file==null)NewsPaper.this.writeCache(url, content);
 					
-					if(needLogin(content))
-					{
-						Log.i(NewsPaper.this.getClass().getSimpleName(),":logging in");
-						executor.submit(nextTask);
-						return;
-					}
-					
-					NewsPaper.this.loadArticle(article, content);
+					NewsPaper.this.loadArticles(section, content);
 					listener.onDone();
 				} catch (Exception e) {
-					article.setBody("");
-					article.setPreview("");
+					
 					e.printStackTrace();
 				} 
 			}
@@ -353,7 +339,7 @@ public abstract class NewsPaper implements Serializable {
 
 			@Override
 			public void OnDownloading(int bytesRecv, int size) {
-				article.setFrom(bytesRecv+"bytes("+size+" bytes) received.");
+				
 				//adapter.notifyDataSetChanged();
 				
 			}
@@ -403,6 +389,45 @@ public abstract class NewsPaper implements Serializable {
 	protected int getBodyIndex()
 	{
 		return 4;
+	}
+	
+	protected void loadArticles(int section, String content)
+	{
+		Section s = this.readSectionAt(section);
+		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+		DocumentBuilder db;
+		try {
+			db = dbf.newDocumentBuilder();
+			Document doc = db.parse(new InputSource(new StringReader(content)));
+			doc.getDocumentElement().normalize();
+			NodeList list = doc.getDocumentElement().getChildNodes();
+			for(int i=0; i< list.getLength(); i++)
+			{
+				Node c = list.item(i);
+				String id = c.getChildNodes().item(0).getTextContent();
+				String title = c.getChildNodes().item(1).getTextContent();
+				String from = c.getChildNodes().item(2).getTextContent().replace("</P>", "").replace("</p>", "").replaceAll("<[^<>]+>", "\r\n").replaceAll("&nbsp;", " ").replace("\r\n", "").trim();
+				String body = c.getChildNodes().item(3).getTextContent();
+				String link = c.getChildNodes().item(4).getTextContent();
+				Article a = new Article();
+				a.setLink(link);a.setBody(body);a.setFrom(from);a.setTitle(title);
+				a.setPreview(a.getBody().replace("</P>", "").replace("</p>", "").replaceAll("<[^<>]+>", "\r\n").replaceAll("&nbsp;", " ").replace("\r\n\r\n", "\r\n").trim());
+				if(a.getPreview().length() > 100)
+					a.setPreview(a.getPreview().substring(0,100));
+				
+				s.put(title, a);
+			}
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 	
 	protected void loadArticle(Article article, String content)

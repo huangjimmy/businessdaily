@@ -28,7 +28,7 @@ public class StringResponseHandler implements ResponseHandler<String> {
 
 	public String handleResponse(HttpResponse response)
 			throws ClientProtocolException, IOException {
-		
+		Log.i(StringResponseHandler.class.getSimpleName(), "entering handleResponse.");
 		Message msg = new Message();
 		msg.what = DownloadTask.DOWNLOADING;
 		Bundle bundle = new Bundle();

@@ -48,38 +48,11 @@ public class UrlDownCallable implements Callable<String>
 	public String call() throws Exception {
 		if(client == null){
 			// Create and initialize HTTP parameters
-	        HttpParams params = new BasicHttpParams();
-	        ConnManagerParams.setMaxTotalConnections(params, 100);
-	        ConnPerRoute connPerRoute = new ConnPerRouteBean(100); 
-	        ConnManagerParams.setMaxConnectionsPerRoute(params, connPerRoute);
-	        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-	        ConnManagerParams.setTimeout(params, 6);
-	        // Create and initialize scheme registry
-	        SchemeRegistry schemeRegistry = new SchemeRegistry();
-	        schemeRegistry.register(
-	                new Scheme("http", PlainSocketFactory.getSocketFactory(), 80));
-	
-	        // Create an HttpClient with the ThreadSafeClientConnManager.
-	        // This connection manager must be used if more than one thread will
-	        // be using the HttpClient.
-	        ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
-		
-	        client = new DefaultHttpClient(cm, params);
+	        client = new DefaultHttpClient();
 
 		}
-		
-		ThreadSafeClientConnManager m = (ThreadSafeClientConnManager) client.getConnectionManager();
-		Log.i("UrlDownCallable", "Connections in pool:"+m.getConnectionsInPool());
-		
+
 		get = new HttpGet(url);
-		if(data != null)
-		{
-			get = new HttpPost(url);
-			((HttpPost)get).setEntity(data);
-		}
-		
-		get.addHeader("User-Agent", "Baiduspider-news");
-		get.addHeader("Pragma", "no-cache");
 		
 		Log.i(this.getClass().getSimpleName(), "downloading "+url);
 		String content = client.execute(get, new StringResponseHandler(handler));

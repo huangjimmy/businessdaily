@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -13,17 +16,15 @@ import com.inspirecoworks.common.business.Article;
 import com.inspirecoworks.common.business.NewsPaper;
 import com.inspirecoworks.common.business.NewsPaper.OnArticleListener;
 
-public class NewsPaperAdapter extends SimpleExpandableListAdapter {
+public class NewsPaperAdapter extends BaseExpandableListAdapter {
 
-	public NewsPaperAdapter(Context context,
-			List<? extends Map<String, ?>> groupData, int groupLayout,
-			String[] groupFrom, int[] groupTo,
-			List<? extends List<? extends Map<String, ?>>> childData,
-			int childLayout, String[] childFrom, int[] childTo) {
-		super(context, groupData, groupLayout, groupFrom, groupTo, childData,
-				childLayout, childFrom, childTo);
+	
+	public NewsPaperAdapter(Context context, NewsPaper paper) {
+		this.paper = paper;
+		this.context = context;
 	}
 	
+	Context context;
 	NewsPaper paper;
 	public void setNewsPaper(NewsPaper paper)
 	{
@@ -33,50 +34,16 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 	
 	public View getChildView(int groupPosition, int childPosition,
 			boolean isLastChild, View convertView, ViewGroup parent) {
-		View v = super.getChildView(groupPosition, childPosition, isLastChild,
-				convertView, parent);
-		final TextView from = (TextView) v.findViewById(R.id.article_from);
-		final TextView preview = (TextView) v.findViewById(R.id.article_preview);
-		preview.setClickable(false);
-		from.setClickable(false);
-		
-		try{
-		String text = from.getText().toString();
-		if(text.length() == 0)from.setText("��������...");
-		}catch(Exception ex)
-		{
-			from.setText("��������...");
-		}
-		final Article a = (Article) this.getChild(groupPosition, childPosition);
-		if(a.getBody()!=null && a.getBody().length()>5)
-		{
-			from.setText(a.getFrom().replaceAll("<[^<>]+>", "").replace("&nbsp;", " ").replace("&gt;", ">").trim());
-			preview.setText(a.getPreview());
-		}
-		
-		paper.readArticle(groupPosition, a.getTitle(), new OnArticleListener(){
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View v = convertView == null?inflater.inflate(R.layout.article_item, parent, false):convertView;
+		TextView title = (TextView) v.findViewById(R.id.article_title);
+		TextView from = (TextView) v.findViewById(R.id.article_from);
+		TextView preview = (TextView) v.findViewById(R.id.article_preview);
 
-			
-			public void onDone() {
-				if(a.getBody()!=null && a.getBody().length()>5)
-				{
-					NewsPaperAdapter.this.notifyDataSetChanged();
-				}
-			}
-
-			
-			public void onException(String t) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			
-			public void onStatus(String s) {
-				a.setFrom(s);
-				NewsPaperAdapter.this.notifyDataSetChanged();
-			}
-			
-		});
+		Article a = (Article) this.getChild(groupPosition, childPosition);
+		title.setText(a.getTitle());
+		from.setText(a.getFrom());
+		preview.setText(a.getPreview());
 		
 		return v;
 	}
@@ -84,9 +51,60 @@ public class NewsPaperAdapter extends SimpleExpandableListAdapter {
 	
 	public View getGroupView(int groupPosition, boolean isExpanded,
 			View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
 		
-		return super.getGroupView(groupPosition, isExpanded, convertView, parent);
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View v = convertView == null?inflater.inflate(R.layout.page_item, parent, false):convertView;
+		TextView page_name = (TextView) v.findViewById(R.id.page_name);
+		page_name.setText(paper.readSectionAt(groupPosition).title);
+		return v;
+	}
+
+
+	public Object getChild(int groupPosition, int childPosition) {
+		// TODO Auto-generated method stub
+		return paper.readSectionAt(groupPosition).values().toArray()[childPosition];
+	}
+
+
+	public long getChildId(int groupPosition, int childPosition) {
+		// TODO Auto-generated method stub
+		return childPosition;
+	}
+
+
+	public int getChildrenCount(int groupPosition) {
+		// TODO Auto-generated method stub
+		return paper.readSectionAt(groupPosition).values().size();
+	}
+
+
+	public Object getGroup(int groupPosition) {
+		// TODO Auto-generated method stub
+		return paper.readSectionAt(groupPosition);
+	}
+
+
+	public int getGroupCount() {
+		// TODO Auto-generated method stub
+		return paper.getSections().size();
+	}
+
+
+	public long getGroupId(int groupPosition) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public boolean hasStableIds() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	public boolean isChildSelectable(int groupPosition, int childPosition) {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	

@@ -50,18 +50,9 @@ public class PaperAdapter extends BaseAdapter {
 			papers[i].setContext(home);
 		}
 		
-		SharedPreferences sp = home.getSharedPreferences("BusinessDaily", 0);
-		if(sp.getString("cnstock_username", "").length() == 0)
-		{
-			Intent intent = new Intent(home, SettingAct.class);
-			home.startActivity(intent);
-		}
-        Cnstock.setUsername(sp.getString("cnstock_username", ""));
-        Cnstock.setPassword(sp.getString("cnstock_password", ""));
-
 		
 		for(int i=0;i<3;i++)
-		if(paper_dates[i].get(Calendar.HOUR_OF_DAY)<7)
+		if(paper_dates[i].get(Calendar.HOUR_OF_DAY)<6)
     	{
     		paper_dates[i].add(Calendar.DAY_OF_MONTH, -1);
     	}
