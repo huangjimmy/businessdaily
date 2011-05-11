@@ -106,7 +106,7 @@ public class PaperAdapter extends BaseAdapter {
     	year = paper_dates[position].get(Calendar.YEAR);
     	month = paper_dates[position].get(Calendar.MONTH)+1;
     	day = paper_dates[position].get(Calendar.DATE);
-    	paper_view.setNewspaper(paper);
+    	//paper_view.setNewspaper(paper);
     	papers[position].readPaper(year, month, day, listener);
     	
     	
