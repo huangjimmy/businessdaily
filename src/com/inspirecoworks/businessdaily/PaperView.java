@@ -70,7 +70,7 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 		
         listview_paper.setOnChildClickListener(this);
         listview_paper.setOnGroupExpandListener(this);
-        progress.setVisibility(GONE);
+        if(!newspaper.isEmpty())progress.setVisibility(GONE);
 	}
 
 	/**

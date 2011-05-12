@@ -6,6 +6,7 @@ import android.widget.Gallery;
 
 import com.inspirecoworks.base.ICBaseActivity;
 import com.inspirecoworks.common.business.NewsPaper;
+import com.mobclick.android.MobclickAgent;
 
 public class Home extends ICBaseActivity{
 
@@ -17,6 +18,8 @@ public class Home extends ICBaseActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        MobclickAgent.update(this);
         
         g = (Gallery) findViewById(R.id.paper_list);
         pAdapter = new PaperAdapter(this);
