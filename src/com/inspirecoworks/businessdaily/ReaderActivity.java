@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.inspirecoworks.base.ICBaseActivity;
 import com.inspirecoworks.common.business.Article;
 
-public class Reader extends ICBaseActivity {
+public class ReaderActivity extends ICBaseActivity {
 	
 	private ArticleView view;
 	
@@ -41,7 +41,7 @@ public class Reader extends ICBaseActivity {
         	btn_share.setOnClickListener(new View.OnClickListener() {
 				
 				public void onClick(View v) {
-					view.share(Reader.this);
+					view.share(ReaderActivity.this);
 					
 				}
 			});
@@ -49,7 +49,7 @@ public class Reader extends ICBaseActivity {
         	btn_fav.setOnClickListener(new View.OnClickListener() {
 				
 				public void onClick(View v) {
-					view.send(Reader.this);
+					view.send(ReaderActivity.this);
 					
 				}
 			});

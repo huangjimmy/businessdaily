@@ -86,7 +86,7 @@ public class PaperView extends LinearLayout implements OnChildClickListener, OnG
 	
 		Article article = (Article) parent.getExpandableListAdapter().getChild(group, child);
 		
-	    Intent intent = new Intent(context, Reader.class);
+	    Intent intent = new Intent(context, ReaderActivity.class);
 	    intent.putExtra("article", article);
 	    
 	    MobclickAgent.onEvent(context, "Read News Started.");
