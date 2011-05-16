@@ -2,6 +2,10 @@ package com.inspirecoworks.businessdaily;
 
 
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Gallery;
 
 import com.inspirecoworks.base.ICBaseActivity;
@@ -40,5 +44,29 @@ public class Home extends ICBaseActivity{
 		return pAdapter.getPapers();
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.tabcontents_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+	}
     
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId())
+		{
+		case R.id.about:
+			MobclickAgent.openFeedbackActivity(this);
+			break;
+		case R.id.refresh:
+			View v = g.getSelectedView();
+			if(v!=null)
+			{
+				((PaperView)v).refreshPaper();
+			}
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 }

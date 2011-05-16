@@ -1,20 +1,14 @@
 package com.inspirecoworks.businessdaily;
 
-import java.util.List;
-import java.util.Map;
-
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
 import com.inspirecoworks.common.business.Article;
 import com.inspirecoworks.common.business.NewsPaper;
-import com.inspirecoworks.common.business.NewsPaper.OnArticleListener;
 
 public class NewsPaperAdapter extends BaseExpandableListAdapter {
 

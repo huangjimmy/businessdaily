@@ -53,7 +53,7 @@
 			   	android:textColor="#706F6D"
 			    android:layout_marginTop="10dp"
 			    android:layout_marginBottom="10dp"
-			    android:text="开发者：黄少君。本软件所用数据全部来源于互联网公开信息。">
+			    android:text="开发者:Inspire Coworks huang@inspirecowork.com。本软件所用数据全部来源于互联网公开信息。">
 		    </TextView>
 
 			

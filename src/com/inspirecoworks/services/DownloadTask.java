@@ -2,7 +2,6 @@ package com.inspirecoworks.services;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.FutureTask;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.impl.client.DefaultHttpClient;

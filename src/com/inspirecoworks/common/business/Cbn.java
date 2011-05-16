@@ -3,9 +3,6 @@ package com.inspirecoworks.common.business;
 import java.io.Serializable;
 import java.util.regex.Pattern;
 
-import android.app.Activity;
-import android.content.Context;
-
 public class Cbn extends NewsPaper implements Serializable {
 
 	public Cbn() {
@@ -38,11 +35,11 @@ public class Cbn extends NewsPaper implements Serializable {
 		return 2;
 	}
 	
-	protected boolean isSectionLink(String link)
+	public boolean isSectionLink(String link)
 	{
 		return link.indexOf("category") >=0;
 	}
-	protected boolean isArticleLink(String link)
+	public boolean isArticleLink(String link)
 	{
 		return link.indexOf("article") >=0;
 	}
@@ -60,12 +57,12 @@ public class Cbn extends NewsPaper implements Serializable {
 	}
 
 	@Override
-	protected String getBaseUrl(int year, int month, int day) {
+	public String getBaseUrl(int year, int month, int day) {
 		return "http://dycj.ynet.com";
 	}
 
 	@Override
-	protected String getHomeLink(int year, int month, int day) {
+	public String getHomeLink(int year, int month, int day) {
 		return String.format("http://210.51.3.35/NewsPaper/column.php?year=%d&mon=%d&day=%d&type=3", year,month,day);
 	}
 
@@ -77,13 +74,13 @@ public class Cbn extends NewsPaper implements Serializable {
 	}
 
 	@Override
-	protected String getBodyEnd() {
+	public String getBodyEnd() {
 		// TODO Auto-generated method stub
 		return "</html>";
 	}
 
 	@Override
-	protected String getBodyStart() {
+	public String getBodyStart() {
 		return "����</div>";
 	}
 

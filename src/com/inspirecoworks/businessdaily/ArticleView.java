@@ -1,18 +1,13 @@
 package com.inspirecoworks.businessdaily;
 
-import com.inspirecoworks.common.business.Article;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.TableLayout;
+
+import com.inspirecoworks.common.business.Article;
 
 public class ArticleView extends TableLayout {
 

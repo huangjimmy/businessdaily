@@ -13,11 +13,13 @@
 <string name="refresh">刷新</string>
 <string name="choosedate">选择日期</string>
 <string name="no_connection">无法连接服务器或读取数据超时，请检查网络连接</string>
-<string name="inprogress">请稍后...</string>
+<string name="inprogress">取报纸中...</string>
 <string name="yesterday">前一天</string>
 <string name="tomorrow">下一天</string>
 <string name="today">今天</string>
 <string name="search">搜索</string>
 <string name="please">请按后退按钮返回主界面</string>
 <string name="favourite">收藏</string>
+<string name="paper_empty">今天的报纸还没到呢。  或者点击这里再试一次。</string>
+<string name="paper_timeout">取报纸的时候发生了些意外,  点击这里再试一次。</string>
 </resources>

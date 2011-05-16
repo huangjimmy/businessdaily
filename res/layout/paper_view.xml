@@ -47,14 +47,13 @@
   android:layout_height="match_parent">
 
   </ExpandableListView>
-   
-    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_layout">
+   <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_layout" android:padding="20sp" android:paddingRight="0px">
         <ProgressBar android:layout_width="wrap_content" android:id="@+id/paper_progress" android:layout_height="wrap_content" android:layout_centerInParent="true"></ProgressBar>
-        <TextView android:layout_below="@id/paper_progress"  android:layout_width="wrap_content" android:layout_height="match_parent" android:id="@+id/progress_info_text" android:text="@string/inprogress" android:layout_centerInParent="true" android:textSize="36sp"></TextView>
+        <TextView android:layout_below="@id/paper_progress"  android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_text" android:text="@string/inprogress" android:layout_centerInParent="true" android:textSize="36sp"></TextView>
+        <TextView android:layout_below="@id/paper_progress"  android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_text_empty" android:text="@string/paper_empty" android:layout_centerInParent="true" android:textSize="28sp"></TextView>
+        <TextView android:layout_below="@id/paper_progress"  android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_text_timeout" android:text="@string/paper_timeout" android:layout_centerInParent="true" android:textSize="28sp"></TextView>
+        
     </RelativeLayout>
-  
-  
-  
 </FrameLayout>
 
 </view>

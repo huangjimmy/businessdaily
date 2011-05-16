@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content">
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
   
-  <ProgressBar android:id="@+android:id/progress"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-        
-  <TextView android:text="正在载入，请稍后..."
-  android:layout_width="wrap_content"
-  android:layout_height="wrap_content"
-  android:id="@+id/progress_label"
-  android:textSize="20sp"
-  android:layout_marginTop="20dp"
-  />
-  
+ <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent" android:id="@+id/progress_info_layout">
+        <ProgressBar android:layout_width="wrap_content" android:id="@+id/paper_progress" android:layout_height="wrap_content" android:layout_centerInParent="true"></ProgressBar>
+        <TextView android:layout_below="@id/paper_progress"  android:layout_width="wrap_content" android:layout_height="match_parent" android:id="@+id/progress_info_text" android:text="@string/inprogress" android:layout_centerInParent="true" android:textSize="36sp"></TextView>
+    </RelativeLayout>
 </LinearLayout>

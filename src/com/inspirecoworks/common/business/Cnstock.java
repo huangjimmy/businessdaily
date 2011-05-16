@@ -1,25 +1,14 @@
 package com.inspirecoworks.common.business;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Vector;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-
-import android.app.Activity;
-import android.content.Context;
 
 //上海证券报
 //http://passport.cnstock.com/http/formlogin.aspx
@@ -61,12 +50,12 @@ public class Cnstock extends NewsPaper implements Serializable {
 	}
 
 	@Override
-	protected String getBaseUrl(int year, int month, int day) {
+	public String getBaseUrl(int year, int month, int day) {
 		return String.format("http://paper.cnstock.com/html/%d-%02d/%02d/", year,month,day);
 	}
 
 	@Override
-	protected String getHomeLink(int year, int month, int day) {
+	public String getHomeLink(int year, int month, int day) {
 		
 		return String.format("http://210.51.3.35/NewsPaper/column.php?year=%d&mon=%d&day=%d&type=1", year,month,day);
 	}
@@ -93,12 +82,12 @@ public class Cnstock extends NewsPaper implements Serializable {
 	}
 
 	@Override
-	protected String getBodyEnd() {
+	public String getBodyEnd() {
 		return "</html>";
 	}
 
 	@Override
-	protected String getBodyStart() {
+	public String getBodyStart() {
 		return "<div id=\"nlist\">";
 	}
 
@@ -125,8 +114,8 @@ public class Cnstock extends NewsPaper implements Serializable {
 	{
 		List<BasicNameValuePair> nvps = new Vector<BasicNameValuePair>();  
 		
-        nvps.add(new BasicNameValuePair("name", username));  
-        nvps.add(new BasicNameValuePair("password", password)); 
+        //nvps.add(new BasicNameValuePair("name", username));  
+        //nvps.add(new BasicNameValuePair("password", password)); 
 		try {
 			return new UrlEncodedFormEntity(nvps, "GBK");
 		} catch (UnsupportedEncodingException e) {

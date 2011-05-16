@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.concurrent.Callable;
 
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,10 +13,8 @@ import android.os.Message;
 public class CacheDownCallable  implements Callable<String>{
 	private String file;
 	private Handler handler;
-	private Context context;
 	public CacheDownCallable(Context context, String file, Handler handler)
 	{
-		this.context = context;
 		this.file = file;
 		this.handler = handler;
 	}
